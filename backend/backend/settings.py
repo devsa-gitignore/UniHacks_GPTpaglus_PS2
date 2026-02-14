@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'review_requests',
     'ratings',
     'improvement_tracker',
-    'home',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +68,8 @@ REST_FRAMEWORK = {
 }
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:5174",
+    "http://localhost:5173"
 ]
 ROOT_URLCONF = 'backend.urls'
 

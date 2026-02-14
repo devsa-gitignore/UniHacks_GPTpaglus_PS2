@@ -12,7 +12,7 @@ from .views import MyTokenObtainPairView, SignupView, ReviewerListView
 
 # FIX: Removed the "api/" prefix so it doesn't double up
 urlpatterns = [
-    path('api/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/signup/', SignupView.as_view(), name='signup'),
-    path('api/reviewers/', ReviewerListView.as_view(), name='reviewers-list'),
+    path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('signup/', SignupView.as_view(), name='signup'),
+    path('reviewers/', ReviewerListView.as_view(), name='reviewers-list'),
 ]

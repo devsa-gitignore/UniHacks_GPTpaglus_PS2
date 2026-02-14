@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'review_requests',
     'ratings',
     'improvement_tracker',
+    'ai',
 ]
 
 MIDDLEWARE = [

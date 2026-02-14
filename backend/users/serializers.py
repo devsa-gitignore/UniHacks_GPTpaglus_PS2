@@ -21,13 +21,14 @@ class SignupSerializer(serializers.ModelSerializer):
 
 class ReviewerProfileSerializer(serializers.ModelSerializer):
     price=serializers.SerializerMethodField()
+    reviewer_id = serializers.IntegerField(source='user.id', read_only=True)
     age = serializers.IntegerField(source='user.age', read_only=True)
     gender = serializers.CharField(source='user.gender', read_only=True)
     class Meta:
         model=ReviewerProfile
         fields=[
             "public_username","credibility_score","total_reviews",
-            "average_rating","acceptance_rate","completion_rate","price","age","gender"
+            "average_rating","acceptance_rate","completion_rate","price","reviewer_id","age","gender"
         ]
     def get_price(self,obj):
         return obj.get_price()

@@ -1,9 +1,87 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FiUpload, FiHeart, FiArrowLeft } from "react-icons/fi";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiUpload, FiArrowLeft } from "react-icons/fi";
 import PL from "../assets/PL Logo.png";
+import { authFetch } from "../lib/api";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const [bio, setBio] = useState("");
+  const [promptAnswers, setPromptAnswers] = useState(["", "", ""]);
+  const [customPromptQuestion, setCustomPromptQuestion] = useState("");
+  const [customPromptAnswer, setCustomPromptAnswer] = useState("");
+  const [datingIntent, setDatingIntent] = useState("go_with_the_flow");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const promptLabels = [
+    "The best way to ask me out is...",
+    "I'm looking for...",
+    "A perfect Sunday looks like...",
+  ];
+
+  const handlePromptChange = (index, value) => {
+    const next = [...promptAnswers];
+    next[index] = value;
+    setPromptAnswers(next);
+  };
+
+  const handleSubmit = async () => {
+    if (!bio.trim()) {
+      setError("Profile bio is required.");
+      return;
+    }
+
+    const prompts = promptAnswers
+      .map((answer, index) => ({
+        question: promptLabels[index],
+        answer: answer.trim(),
+        is_custom: false,
+      }))
+      .filter((prompt) => prompt.answer.length > 0);
+
+    if (customPromptQuestion.trim() && customPromptAnswer.trim()) {
+      prompts.push({
+        question: customPromptQuestion.trim(),
+        answer: customPromptAnswer.trim(),
+        is_custom: true,
+      });
+    }
+
+    if (prompts.length < 2) {
+      setError("Add at least 2 prompt responses before submitting.");
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+
+    try {
+      const response = await authFetch("/api/profiles/versions/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bio: bio.trim(),
+          dating_intent: datingIntent,
+          prompts,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.detail || "Could not submit profile.");
+        return;
+      }
+
+      localStorage.setItem("currentProfileVersionId", String(data.id));
+      navigate("/reviewer");
+    } catch {
+      setError("Server unavailable. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="flex justify-between items-center px-8 py-4 border-b bg-white">
@@ -62,6 +140,8 @@ const Profile = () => {
             </p>
 
             <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
               className="mt-4 w-full border rounded-xl p-4 h-28 focus:outline-none focus:ring-2 focus:ring-pink-400"
               placeholder="e.g., Software engineer by day, amateur chef by night..."
             />
@@ -73,14 +153,12 @@ const Profile = () => {
               Add 2–3 of your profile prompt responses
             </p>
 
-            {[
-              "The best way to ask me out is...",
-              "I'm looking for...",
-              "A perfect Sunday looks like...",
-            ].map((label, i) => (
+            {promptLabels.map((label, i) => (
               <div key={i}>
                 <p className="text-sm text-gray-600 mb-1">{label}</p>
                 <input
+                  value={promptAnswers[i]}
+                  onChange={(e) => handlePromptChange(i, e.target.value)}
                   className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-pink-400"
                   placeholder="Your response..."
                 />
@@ -98,6 +176,8 @@ const Profile = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Your Prompt</p>
               <input
+                value={customPromptQuestion}
+                onChange={(e) => setCustomPromptQuestion(e.target.value)}
                 className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-pink-400"
                 placeholder="e.g., Two truths and a lie about me..."
               />
@@ -106,6 +186,8 @@ const Profile = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Your Answer</p>
               <textarea
+                value={customPromptAnswer}
+                onChange={(e) => setCustomPromptAnswer(e.target.value)}
                 className="w-full border rounded-xl p-3 h-24 focus:outline-none focus:ring-2 focus:ring-pink-400"
                 placeholder="Write your answer here..."
               />
@@ -122,12 +204,23 @@ const Profile = () => {
               {["Casual", "Serious", "Go with the Flow"].map((item, i) => (
                 <button
                   key={i}
+                  type="button"
+                  onClick={() =>
+                    setDatingIntent(
+                      item === "Casual"
+                        ? "casual"
+                        : item === "Serious"
+                        ? "serious"
+                        : "go_with_the_flow"
+                    )
+                  }
                   className="flex-1 border rounded-xl py-4 hover:border-pink-500 hover:text-pink-600 transition cursor-pointer"
                 >
                   {item}
                 </button>
               ))}
             </div>
+            {error && <p className="text-sm text-red-600 mt-3">{error}</p>}
           </div>
         </div>
 
@@ -145,8 +238,13 @@ const Profile = () => {
               <li>✓ Version comparison</li>
             </ul>
 
-            <button className="mt-6 w-full bg-white text-pink-700 rounded-xl py-3 font-medium hover:opacity-90 cursor-pointer">
-              Submit for Review
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={submitting}
+              className="mt-6 w-full bg-white text-pink-700 rounded-xl py-3 font-medium hover:opacity-90 cursor-pointer disabled:opacity-60"
+            >
+              {submitting ? "Submitting..." : "Submit for Review"}
             </button>
           </div>
 

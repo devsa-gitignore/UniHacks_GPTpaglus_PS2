@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 import { FiArrowLeft, FiTrendingUp } from "react-icons/fi";
 import PL from "../assets/PL Logo.png";
+import { authFetch } from "../lib/api";
 
 const Stars = ({ count }) => (
   <div className="flex gap-1 text-yellow-400 text-sm">
@@ -25,6 +26,40 @@ const ReviewSection = ({ title, rating, children }) => (
 );
 
 const Reviews = () => {
+  const [review, setReview] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLatestReview = async () => {
+      setLoading(true);
+      try {
+        const response = await authFetch("/api/reviews/latest/");
+
+        if (!response.ok) {
+          setReview(null);
+          return;
+        }
+
+        const data = await response.json();
+        setReview(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLatestReview();
+  }, []);
+
+  const sectionScores = useMemo(() => {
+    if (!review?.sections) return {};
+    return review.sections.reduce((acc, section) => {
+      acc[section.section] = Number(section.score || 0) * 20;
+      return acc;
+    }, {});
+  }, [review]);
+
+  const overallScore = review?.overall_score ? Math.round(Number(review.overall_score) * 20) : 0;
+
   return (
     <div className="min-h-screen bg-white w-[79rem]">
     
@@ -50,13 +85,17 @@ const Reviews = () => {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-semibold text-gray-900">
-            Profile Review - Version 3
+            {review ? `Profile Review - Version ${review.version_number}` : "Profile Review"}
             <span className="ml-3 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full align-middle">
-              Complete
+              {review ? "Complete" : "Pending"}
             </span>
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Received 5 reviews on Feb 12, 2026
+            {loading
+              ? "Loading latest review..."
+              : review
+              ? `Reviewed on ${new Date(review.created_at).toLocaleDateString()}`
+              : "No completed reviews yet"}
           </p>
         </div>
 
@@ -66,7 +105,7 @@ const Reviews = () => {
             <p className="text-sm opacity-80">Overall Impression Score</p>
 
             <h2 className="text-5xl font-bold mt-2">
-              85 <span className="text-lg font-medium">/100</span>
+              {overallScore} <span className="text-lg font-medium">/100</span>
             </h2>
 
             <p className="flex items-center gap-2 text-sm mt-3">
@@ -82,17 +121,17 @@ const Reviews = () => {
 
           {/* Score Circle */}
           <div className="w-36 h-36 rounded-full border-[10px] border-white/50 flex items-center justify-center text-2xl font-bold">
-            85%
+            {overallScore}%
           </div>
         </div>
 
         {/* Metric Bars */}
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "Photos", score: 88 },
-            { label: "Bio", score: 82 },
-            { label: "Prompts", score: 87 },
-            { label: "Authenticity", score: 84 },
+            { label: "Photos", score: sectionScores.photos || 0 },
+            { label: "Bio", score: sectionScores.bio || 0 },
+            { label: "Prompts", score: sectionScores.prompts || 0 },
+            { label: "Authenticity", score: overallScore || 0 },
           ].map((item, i) => (
             <div
               key={i}

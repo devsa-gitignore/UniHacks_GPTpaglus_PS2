@@ -5,7 +5,7 @@ import ReviewerNavbar from "./ReviewerNavbar";
 export default function PagesWithNavbar() {
   const role = localStorage.getItem("role");
 
-  const Navbar = role === "reviewer" ? ReviewerNavbar : ReviewerNavbar;
+  const Navbar = role === "reviewer" ? ReviewerNavbar : UserNavbar;
 
   return (
     <div className="flex min-h-screen bg-white">

@@ -2,6 +2,8 @@ import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import { FiEye } from "react-icons/fi";
 import { MdOutlineFileUpload, MdFeedback, MdPhoto } from "react-icons/md";
 import { HiArrowUpTray } from "react-icons/hi2";
+import { useEffect, useMemo, useState } from "react";
+import { authFetch } from "../lib/api";
 
 
 const StarRating = ({ rating }) => {
@@ -30,13 +32,67 @@ const ActivityItem = ({ icon: Icon, bg, color, text, time }) => (
 );
 
 const HomePage = () => {
+  const [versions, setVersions] = useState([]);
+  const [latestReview, setLatestReview] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      setLoading(true);
+
+      try {
+        const [versionsRes, latestReviewRes] = await Promise.all([
+          authFetch("/api/profiles/versions/"),
+          authFetch("/api/reviews/latest/"),
+        ]);
+
+        if (versionsRes.ok) {
+          const versionsData = await versionsRes.json();
+          setVersions(Array.isArray(versionsData) ? versionsData : []);
+        }
+
+        if (latestReviewRes.ok) {
+          const reviewData = await latestReviewRes.json();
+          setLatestReview(reviewData);
+        } else {
+          setLatestReview(null);
+        }
+      } catch {
+        setVersions([]);
+        setLatestReview(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
+  const username = localStorage.getItem("username") || "there";
+  const latestVersion = versions[0] || null;
+
+  const displayDate = (isoDate) => {
+    if (!isoDate) return "N/A";
+    return new Date(isoDate).toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const versionCount = versions.length;
+  const reviewScoreOutOfFive = useMemo(() => {
+    if (!latestReview?.overall_score) return 0;
+    return Math.min(5, Number(latestReview.overall_score));
+  }, [latestReview]);
+
   return (
     <div className="w-[79rem] h-fit py-8 space-y-8 px-8">
 
 
       <div>
         <h1 className="text-3xl font-semibold text-gray-800">
-          Welcome back, Alex!
+          Welcome back, {username}!
         </h1>
         <p className="text-gray-500 mt-1">
           Here's how your profile is performing
@@ -45,29 +101,36 @@ const HomePage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <StarRating rating={3} />
+          <StarRating rating={reviewScoreOutOfFive || 0} />
           <p className="text-gray-500 mt-4 text-sm">Current Score</p>
-          <p className="text-green-600 text-sm mt-2">+11 from last version</p>
+          <p className="text-green-600 text-sm mt-2">
+            {latestReview ? `${latestReview.overall_score}/5 from latest review` : "No reviews yet"}
+          </p>
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h2 className="text-2xl font-semibold text-gray-800">3</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">{versionCount}</h2>
           <p className="text-gray-500 mt-2 text-sm">Profile Versions</p>
-          <p className="text-gray-400 text-sm mt-2">Latest: Feb 10, 2026</p>
+          <p className="text-gray-400 text-sm mt-2">Latest: {displayDate(latestVersion?.created_at)}</p>
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h2 className="text-2xl font-semibold text-gray-800">5</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">{latestReview ? 1 : 0}</h2>
           <p className="text-gray-500 mt-2 text-sm">Reviews Received</p>
-          <p className="text-gray-400 text-sm mt-2">Avg rating: 4.8/5</p>
+          <p className="text-gray-400 text-sm mt-2">
+            Avg rating: {latestReview?.overall_score ? `${latestReview.overall_score}/5` : "N/A"}
+          </p>
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h2 className="text-2xl font-semibold text-gray-800">37%</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {latestVersion ? `${Number(latestVersion.improvement_percentage || 0).toFixed(0)}%` : "0%"}
+          </h2>
           <p className="text-gray-500 mt-2 text-sm">Improvement</p>
           <p className="text-gray-400 text-sm mt-2">Since first version</p>
         </div>
       </div>
+      {loading && <p className="text-sm text-gray-500">Refreshing dashboard...</p>}
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

@@ -28,3 +28,4 @@ class ReviewRequest(models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return f"{self.profile_version} → {self.reviewer.username}"
+

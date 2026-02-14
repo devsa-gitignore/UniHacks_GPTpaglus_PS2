@@ -3,7 +3,7 @@ import React from 'react'
 const ReviewerSettings = () => {
   return (
     <div>
-      <Yooo></Yooo>
+      Yooo
     </div>
   )
 }

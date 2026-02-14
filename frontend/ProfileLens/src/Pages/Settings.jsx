@@ -14,12 +14,9 @@ export default function Settings() {
 
       {/* ================= TABS ================= */}
       <div className="flex gap-8 border-b pb-3 text-sm text-gray-500">
-        <button className="text-[#6C0C27] border-b-2 border-purple-500 pb-3 font-medium">
+        <button className="text-[#6C0C27] border-b-2 border-purple-500 pb-3 font-medium cursor-pointer">
           Profile
         </button>
-        <button className="hover:text-[#6C0C27]">Notifications</button>
-        <button className="hover:text-[#6C0C27]">Privacy</button>
-        <button className="hover:text-[#6C0C27]">Billing</button>
       </div>
 
       {/* ================= PROFILE INFO ================= */}
@@ -34,7 +31,7 @@ export default function Settings() {
             AK
           </div>
 
-          <button className="flex items-center gap-2 border border-[#6C0C27] text-[#6C0C27] px-4 py-2 rounded-full text-sm hover:bg-pink-50">
+          <button className="flex items-center gap-2 border border-[#6C0C27] text-[#6C0C27] px-4 py-2 rounded-full text-sm hover:bg-pink-50 cursor-pointer">
             <FaCamera /> Upload Photo
           </button>
 
@@ -45,14 +42,14 @@ export default function Settings() {
 
         {/* Inputs */}
         <div className="grid md:grid-cols-2 gap-6">
-          <Input label="First Name" value="Alex" />
-          <Input label="Last Name" value="Kim" />
-          <Input label="Email" value="alex.kim@example.com" />
-          <Input label="Phone Number" value="+1 (555) 123-4567" />
+          <Input label="First Name"  />
+          <Input label="Last Name" />
+          <Input label="Email" />
+          <Input label="Phone Number" />
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-4 pt-4 border-t">
+        <div className="flex justify-end gap-4 pt-4">
           <button className="px-5 py-2 rounded-full border text-sm hover:bg-gray-50">
             Cancel
           </button>

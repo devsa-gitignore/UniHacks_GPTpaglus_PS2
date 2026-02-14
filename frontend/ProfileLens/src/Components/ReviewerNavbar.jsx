@@ -54,7 +54,7 @@ const ReviewerNavbar = () => {
             </li>
           </Link>
 
-          <Link to="/settings">
+          <Link to="/reviewersettings">
             <li className="flex items-center gap-2 px-6 py-3 rounded-xl text-gray-800 hover:text-[#6C0C27] hover:bg-gradient-to-l from-[#ffd7ef96] to-white transition">
               <IoSettingsOutline className="w-5 h-5" />
               Settings

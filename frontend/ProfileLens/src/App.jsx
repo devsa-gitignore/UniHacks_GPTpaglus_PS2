@@ -10,6 +10,7 @@ import Compare from "./Pages/CompareReview";
 import ReviewerSelection from "./Pages/ReviewerSelection";
 import Payment from "./Pages/Payment";
 import PagesWithNavbar from "./Components/PagesWithNavbar";
+import ReviewerHomePage from "./Pages/ReviewerHomePage";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
             <Route path="/compare" element={<Compare />} />
             <Route path="/reviewer" element={<ReviewerSelection />} />
             <Route path="/payment" element={<Payment />} />
-            
+            <Route path="/reviewees" element={<ReviewerHomePage />} />
           </Route>
           {/* </Route> */}
         </Routes>

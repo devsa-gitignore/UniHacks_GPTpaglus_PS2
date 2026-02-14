@@ -56,10 +56,9 @@ const completed = [
 export default function ReviewerHomePage() {
   return (
     <div className="bg-white h-fit py-8 space-y-8 px-8">
-
       {/* ===== Header ===== */}
       <div>
-        <h1 className="text-3xl font-semibold text-[#6C0C27]">Review Queue</h1>
+        <h1 className="text-3xl font-semibold text-gray-800">Review Queue</h1>
         <p className="text-sm text-gray-500 mt-1">
           Select a profile to start reviewing
         </p>
@@ -103,44 +102,45 @@ export default function ReviewerHomePage() {
           Profiles Ready for Review
         </h2>
 
-
-        <div className="space-y-4">
-          {readyProfiles.map((p) => (
-            <div
-              key={p.id}
-              className="flex items-center justify-between border border-[#f1c5d8] rounded-xl p-4 hover:bg-[#fff6fa] transition cursor-pointer"
-            >
-              {/* Left */}
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#f7e4ee] flex items-center justify-center text-[#6C0C27]">
-                  <IoDocumentTextOutline />
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-[#6C0C27]">
-                      User {p.id}
-                    </p>
-
-                    {p.urgent && (
-                      <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-                        Urgent
-                      </span>
-                    )}
+        <Link to="/reviewuser">
+          <div className="space-y-4">
+            {readyProfiles.map((p) => (
+              <div
+                key={p.id}
+                className="flex items-center justify-between border border-[#f1c5d8] rounded-xl p-4 hover:bg-[#fff6fa] transition cursor-pointer"
+              >
+                {/* Left */}
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#f7e4ee] flex items-center justify-center text-[#6C0C27]">
+                    <IoDocumentTextOutline />
                   </div>
 
-                  <p className="text-sm text-gray-500">{p.meta}</p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-[#6C0C27]">
+                        User {p.id}
+                      </p>
+
+                      {p.urgent && (
+                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
+                          Urgent
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-sm text-gray-500">{p.meta}</p>
+                  </div>
+                </div>
+
+                {/* Right */}
+                <div className="text-right">
+                  <p className="text-green-600 font-semibold">{p.payment}</p>
+                  <p className="text-xs text-gray-400">Payment</p>
                 </div>
               </div>
-
-              {/* Right */}
-              <div className="text-right">
-                <p className="text-green-600 font-semibold">{p.payment}</p>
-                <p className="text-xs text-gray-400">Payment</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Link>
       </div>
 
       {/* ===== Recently Completed ===== */}
@@ -151,10 +151,7 @@ export default function ReviewerHomePage() {
 
         <div className="space-y-6">
           {completed.map((c) => (
-            <div
-              key={c.id}
-              className="flex items-center justify-between"
-            >
+            <div key={c.id} className="flex items-center justify-between">
               {/* Left */}
               <div className="flex items-center gap-4">
                 <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-green-600">

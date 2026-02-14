@@ -10,7 +10,7 @@ const ProfileSummary = () => {
         const fetchSummary = async () => {
             try {
                 // 1. Get the JWT token from wherever you stored it during login
-                const token = localStorage.getItem('access_token'); 
+                const token = localStorage.getItem('accessoken'); 
 
                 // 2. Make the GET request to your Django backend, attaching the token
                 const response = await axios.get('http://localhost:8000/api/summary/', {

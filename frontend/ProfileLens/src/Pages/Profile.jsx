@@ -4,10 +4,35 @@ import { FiUpload, FiHeart, FiArrowLeft } from "react-icons/fi";
 import PL from "../assets/PL Logo.png";
 
 const Profile = () => {
+  const [images, setImages] = React.useState([]);
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (images.length + files.length > 6) {
+      alert("You can upload maximum 6 photos");
+      return;
+    }
+
+    const newImages = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setImages((prev) => [...prev, ...newImages]);
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="flex justify-between items-center px-8 py-4 border-b bg-white">
-        <Link to="/home" className="flex justify-center items-center gap-4 text-lg text-gray-500 hover:text-gray-700">
+        <Link
+          to="/home"
+          className="flex justify-center items-center gap-4 text-lg text-gray-500 hover:text-gray-700"
+        >
           <FiArrowLeft /> Back to Dashboard
         </Link>
 
@@ -49,9 +74,50 @@ const Profile = () => {
               Upload 3–6 photos from your dating profile
             </p>
 
-            <div className="mt-4 border-2 border-dashed rounded-xl h-40 flex flex-col items-center justify-center text-gray-400 cursor-pointer">
-              <FiUpload className="text-2xl" />
-              Upload
+            <div className="mt-4 space-y-4">
+              {/* Upload box */}
+              {images.length < 6 && (
+                <label className="border-2 border-dashed rounded-xl h-40 flex flex-col items-center justify-center text-gray-400 cursor-pointer hover:border-pink-400 transition">
+                  <FiUpload className="text-2xl" />
+                  <span className="text-sm mt-2">Click to upload photos</span>
+
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                </label>
+              )}
+
+              {/* Preview grid */}
+              {images.length > 0 && (
+                <div className="grid grid-cols-3 gap-3">
+                  {images.map((img, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={img.preview}
+                        alt="preview"
+                        className="h-24 w-full object-cover rounded-lg border"
+                      />
+
+                      {/* Remove button */}
+                      <button
+                        onClick={() => removeImage(index)}
+                        className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Helper text */}
+              <p className="text-xs text-gray-400">
+                Upload between 3 and 6 photos
+              </p>
             </div>
           </div>
 
@@ -87,7 +153,7 @@ const Profile = () => {
               </div>
             ))}
           </div>
-          
+
           <div className="bg-white rounded-2xl border p-6 space-y-4">
             <h2 className="font-semibold text-gray-800">Personal Prompt</h2>
             <p className="text-sm text-gray-500">

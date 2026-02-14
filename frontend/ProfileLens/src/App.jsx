@@ -10,6 +10,7 @@ import Compare from "./Pages/CompareReview";
 import ReviewerSelection from "./Pages/ReviewerSelection";
 import Payment from "./Pages/Payment";
 import PagesWithNavbar from "./Components/PagesWithNavbar";
+import ProtectedRoute from "./Routing/ProtectedRoute";
 
 function App() {
   return (
@@ -19,17 +20,16 @@ function App() {
           <Route path="/" element={<Landup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          {/* <Route element={<ProtectedRoute />}> */}
-          <Route element={<PagesWithNavbar />}>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/profiles" element={<Profile />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/compare" element={<Compare />} />
-            <Route path="/reviewer" element={<ReviewerSelection />} />
-            <Route path="/payment" element={<Payment />} />
-            
+          <Route element={<ProtectedRoute />}>
+            <Route element={<PagesWithNavbar />}>
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/profiles" element={<Profile />} />
+              <Route path="/reviews" element={<Reviews />} />
+              <Route path="/compare" element={<Compare />} />
+              <Route path="/reviewer" element={<ReviewerSelection />} />
+              <Route path="/payment" element={<Payment />} />
+            </Route>
           </Route>
-          {/* </Route> */}
         </Routes>
       </Router>
     </>

@@ -6,10 +6,11 @@ from django.core.validators import MinValueValidator
 
 class User(AbstractUser):
     phone = models.CharField(max_length=12,null=True, blank=True)
-    age = models.IntegerField(null=True, blank=True)
-    validators=[
-            MinValueValidator(18, message="You must be at least 18 years old to register.")
-        ]
+    age = models.IntegerField(
+        null=True, 
+        blank=True,
+        validators=[MinValueValidator(18, message="You must be at least 18 years old to register.")]
+    )
     gender = models.CharField(
         max_length = 10,
         null=True, blank=True,
@@ -34,7 +35,7 @@ class ReviewerProfile(models.Model):
     public_username = models.CharField(
         max_length=50,
         unique=True,
-        default="anonymous",
+        # default="anonymous",
     )
     total_reviews=models.IntegerField(default=0)
     average_rating = models.FloatField(default=0)

@@ -11,6 +11,7 @@ import ReviewerSelection from "./Pages/ReviewerSelection";
 import Payment from "./Pages/Payment";
 import PagesWithNavbar from "./Components/PagesWithNavbar";
 import ReviewerHomePage from "./Pages/ReviewerHomePage";
+import ReviewUser from "./Pages/ReviewUser";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/reviewer" element={<ReviewerSelection />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/reviewees" element={<ReviewerHomePage />} />
+            <Route path="/reviewuser" element={<ReviewUser />} />
           </Route>
           {/* </Route> */}
         </Routes>

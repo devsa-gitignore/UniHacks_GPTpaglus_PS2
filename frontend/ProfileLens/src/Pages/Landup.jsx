@@ -43,7 +43,7 @@ const Landup = () => {
           <div className="font-medium text-gray-700">Trusted by 10,000+ users</div>
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-bold text-[#6C0C27] max-w-4xl leading-tight">
+        <h1 className="text-5xl md:text-6xl font-bold text-[#6C0C27] max-w-6xl leading-tight">
           Helping You Get Matches... not Ghosted
         </h1>
         

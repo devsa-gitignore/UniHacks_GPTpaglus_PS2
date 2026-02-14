@@ -11,6 +11,7 @@ import Payment from "./Pages/Payment";
 import PagesWithNavbar from "./Components/PagesWithNavbar";
 import ReviewerHomePage from "./Pages/ReviewerHomePage";
 import ReviewUser from "./Pages/ReviewUser";
+import Earnings from "./Pages/Earnings"; 
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/payment" element={<Payment />} />
             <Route path="/reviewees" element={<ReviewerHomePage />} />
             <Route path="/reviewuser" element={<ReviewUser />} />
+            <Route path="/earnings" element={<Earnings />} />
           </Route>
         </Routes>
       </Router>

@@ -1,5 +1,12 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
+export const clearAuthSession = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("username");
+  localStorage.removeItem("role");
+};
+
 export const getAuthHeaders = () => {
   const token = localStorage.getItem("accessToken");
   const headers = {
@@ -50,10 +57,7 @@ export const authFetch = async (path, options = {}) => {
 
   const newAccessToken = await refreshAccessToken();
   if (!newAccessToken) {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
+    clearAuthSession();
     window.location.href = "/login";
     return response;
   }

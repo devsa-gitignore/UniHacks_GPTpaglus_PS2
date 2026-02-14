@@ -1,13 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IoDocumentTextOutline,
-  IoEyeOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
 import { FiDollarSign, FiLogOut } from "react-icons/fi";
 import PL from "../assets/PL Logo.png";
+import { clearAuthSession } from "../lib/api";
 
 const ReviewerNavbar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearAuthSession();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <div className="fixed left-0 top-0 w-64 h-screen border-r-2 border-gray-200 bg-white flex flex-col px-8 py-6">
       {/* ===== TOP ===== */}
@@ -76,7 +83,11 @@ const ReviewerNavbar = () => {
         </div>
 
         {/* Logout — MATCH USER NAVBAR STYLE */}
-        <button className="flex items-center gap-2 text-gray-800 hover:text-[#6C0C27] transition">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-gray-800 hover:text-[#6C0C27] transition"
+        >
           <FiLogOut className="w-5 h-5" />
           Logout
         </button>

@@ -50,11 +50,11 @@ export default function Settings() {
 
         {/* Actions */}
         <div className="flex justify-end gap-4 pt-4">
-          <button className="px-5 py-2 rounded-full border text-sm hover:bg-gray-50">
+          <button className="px-5 py-2 rounded-full border text-sm cursor-pointer hover:bg-gray-50">
             Cancel
           </button>
 
-          <button className="flex items-center gap-2 px-6 py-2 rounded-full text-white bg-gradient-to-r from-[#7e233f] to-[#d65b9c] text-sm">
+          <button className="flex items-center gap-2 px-6 py-2 rounded-full text-white bg-gradient-to-r cursor-pointer from-[#7e233f] to-[#d65b9c] text-sm">
             <FiSave /> Save Changes
           </button>
         </div>
@@ -73,7 +73,7 @@ export default function Settings() {
         </div>
 
         <div className="flex justify-end pt-4">
-          <button className="px-6 py-2 rounded-full text-white bg-gradient-to-r from-[#7e233f] to-[#d65b9c] text-sm">
+          <button className="px-6 py-2 rounded-full text-white bg-gradient-to-r from-[#7e233f] to-[#d65b9c] text-sm cursor-pointer">
             Update Password
           </button>
         </div>

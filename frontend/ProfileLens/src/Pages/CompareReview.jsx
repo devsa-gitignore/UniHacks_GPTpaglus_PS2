@@ -23,10 +23,10 @@ const CompareReview = () => {
 
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-10">
         <div>
-          <h1 className="text-3xl font-semibold text-[#8b2d52]">
+          <h1 className="text-3xl font-semibold text-gray-800">
             Version Comparison
           </h1>
-          <p className="text-[#a23360] text-sm mt-1">
+          <p className="text-gray-600 text-sm mt-1">
             Track your profile improvements over time
           </p>
         </div>
@@ -57,7 +57,7 @@ const CompareReview = () => {
         </div>
 
         <div className="bg-white border border-pink-200 rounded-2xl p-6">
-          <h2 className="font-semibold text-[#8b2d52] mb-4">
+          <h2 className="font-semibold text-gray-800 mb-4">
             Score Progression
           </h2>
 
@@ -73,7 +73,7 @@ const CompareReview = () => {
         </div>
 
         <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-[#8b2d52]">
+          <h2 className="text-xl font-semibold text-gray-800">
             Compare Versions
           </h2>
 
@@ -210,12 +210,12 @@ const CompareReview = () => {
           </div>
 
           <div className="flex gap-3">
-            <button className="bg-gradient-to-r from-[#8b2d52] to-[#d65b9c] text-white px-5 py-2 rounded-xl text-sm">
+            <Link to="/reviews"><button className="bg-gradient-to-r from-[#8b2d52] to-[#d65b9c] text-white px-5 py-2 rounded-xl text-sm cursor-pointer">
               View Full Feedback
-            </button>
-            <button className="border-2 border-[#8b2d52] px-5 py-2 rounded-xl text-sm hover:bg-gray-50 text-[#8b2d52]">
+            </button></Link>
+            <Link to="/profiles"><button className="border-2 border-[#8b2d52] px-5 py-2 rounded-xl text-sm hover:bg-gray-50 text-[#8b2d52] cursor-pointer">
               Upload New Version
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>

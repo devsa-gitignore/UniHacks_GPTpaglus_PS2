@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUser, FiBell, FiLogOut } from "react-icons/fi";
+import { FaUserCheck } from "react-icons/fa";
 import { IoEyeOutline, IoSettingsOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import PL from "../assets/PL Logo.png";
@@ -28,6 +29,9 @@ const Navbar = () => {
           </Link>
           <Link to="/reviews"><li className="text-gray-800 hover:text-[#6C0C27] flex flex-row transition-transform cursor-pointer hover:bg-gradient-to-l from-[#ffd7ef96] to-white rounded-xl px-8 py-4">
             <IoEyeOutline className="mr-2 w-6 h-6" /> Reviews
+          </li></Link>
+          <Link to="/reviewer"><li className="text-gray-800 hover:text-[#6C0C27] flex flex-row transition-transform cursor-pointer hover:bg-gradient-to-l from-[#ffd7ef96] to-white rounded-xl px-8 py-4">
+            <FaUserCheck className="mr-2 w-6 h-6" /> Reviewer
           </li></Link>
           <li className="text-gray-800 hover:text-[#6C0C27] flex flex-row transition-transform cursor-pointer hover:bg-gradient-to-l from-[#ffd7ef96] to-white rounded-xl px-8 py-4">
             <FiBell className="mr-2 w-6 h-6" /> Notifications

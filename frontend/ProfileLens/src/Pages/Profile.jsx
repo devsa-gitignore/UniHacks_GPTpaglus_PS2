@@ -145,7 +145,7 @@ const Profile = () => {
               <li>✓ Version comparison</li>
             </ul>
 
-            <button className="mt-6 w-full bg-white text-pink-700 rounded-xl py-3 font-medium hover:opacity-90">
+            <button className="mt-6 w-full bg-white text-pink-700 rounded-xl py-3 font-medium hover:opacity-90 cursor-pointer">
               Submit for Review
             </button>
           </div>

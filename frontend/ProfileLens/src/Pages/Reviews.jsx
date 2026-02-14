@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+
 import { FiArrowLeft, FiTrendingUp } from "react-icons/fi";
 import PL from "../assets/PL Logo.png";
 
@@ -230,7 +231,7 @@ const Reviews = () => {
             ))}
           </div>
 
-          <button className="w-full mt-6 bg-gradient-to-r from-[#8b2d52] to-[#d65b9c] text-white py-3 rounded-xl font-medium hover:opacity-90 transition">
+          <button className="w-full mt-6 bg-gradient-to-r from-[#8b2d52] to-[#d65b9c] text-white py-3 rounded-xl font-medium hover:opacity-90 transition cursor-pointer">
             Upload Improved Version
           </button>
         </ReviewSection>

@@ -102,7 +102,7 @@ const HomePage = () => {
             </div>
           ))}
 
-          <button className="mt-6 w-full border rounded-xl py-3 text-gray-700 hover:bg-gray-100 transition flex items-center justify-center gap-3">
+          <button className="mt-6 w-full border rounded-xl py-3 text-gray-700 hover:bg-gray-100 transition flex items-center justify-center gap-3 cursor-pointer">
             <MdOutlineFileUpload size={20} />
             Upload New Version
           </button>

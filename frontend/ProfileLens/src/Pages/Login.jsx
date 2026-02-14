@@ -47,7 +47,7 @@ const Login = () => {
                 <button
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                    border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
-                   transition duration-200"
+                   transition duration-200 cursor-pointer"
                 >
                   <FaGoogle size={16} />
                 </button>
@@ -55,7 +55,7 @@ const Login = () => {
                 <button
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                    border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
-                   transition duration-200"
+                   transition duration-200 cursor-pointer"
                 >
                   <FaFacebookF size={16} />
                 </button>
@@ -63,7 +63,7 @@ const Login = () => {
                 <button
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                    border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
-                   transition duration-200"
+                   transition duration-200 cursor-pointer"
                 >
                   <FaXTwitter size={16} />
                 </button>
@@ -111,7 +111,7 @@ const Login = () => {
               <div className="pt-8">
                 <button
                   type="submit"
-                  className="w-full bg-white py-2 rounded-full hover:bg-gray-200 transition text-2xl border-2 border-[#6C0C27]"
+                  className="w-full bg-white py-2 rounded-full hover:bg-gray-200 transition text-2xl border-2 border-[#6C0C27] cursor-pointer"
                 >
                   Login
                 </button>

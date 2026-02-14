@@ -29,7 +29,7 @@ const Landup = () => {
             <li className="cursor-pointer hover:text-[#6C0C27] transition">Reviews</li>
           </ul>
           <Link to="/login">
-            <button className="rounded-full bg-gradient-to-r from-[#6C0C27] to-[#EC38A4] py-2 px-6 text-white font-semibold hover:opacity-90 transition">
+            <button className="rounded-full bg-gradient-to-r from-[#6C0C27] to-[#EC38A4] py-2 px-6 text-white font-semibold hover:opacity-90 transition cursor-pointer">
               Get Started
             </button>
           </Link>
@@ -59,13 +59,10 @@ const Landup = () => {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
           <Link to="/login">
-            <button className="rounded-full bg-gradient-to-r from-[#6C0C27] to-[#EC38A4] py-4 px-8 text-xl text-white font-semibold shadow-lg hover:scale-105 transition transform">
+            <button className="rounded-full bg-gradient-to-r from-[#6C0C27] to-[#EC38A4] py-4 px-8 text-xl text-white font-semibold shadow-lg hover:scale-105 transition transform cursor-pointer">
               Get My Profile Reviewed
             </button>
           </Link>
-          <button className="rounded-full bg-white py-4 px-8 text-xl font-semibold text-[#6C0C27] shadow-lg border border-gray-100 hover:bg-gray-50 transition">
-            See Example Feedback
-          </button>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 mt-16 text-gray-600 font-medium">
@@ -218,7 +215,7 @@ const Landup = () => {
             Join thousands of users who've improved their profiles and found better matches.
           </p>
           <Link to="/login">
-            <button className="rounded-full bg-white text-[#6C0C27] py-4 px-10 text-xl font-bold hover:scale-105 transition transform shadow-lg">
+            <button className="rounded-full bg-white text-[#6C0C27] py-4 px-10 text-xl font-bold hover:scale-105 transition transform shadow-lg cursor-pointer">
               Get Started Now
             </button>
           </Link>

@@ -14,6 +14,7 @@ import ReviewUser from "./Pages/ReviewUser";
 import Earnings from "./Pages/Earnings"; 
 import Settings from "./Pages/Settings";
 import ReviewerSettings from "./Pages/ReviewerSettings";
+import Notifications from "./Pages/Notifications";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/earnings" element={<Earnings />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/reviewersettings" element={<ReviewerSettings />} />
+            <Route path="/notifications" element={<Notifications />} />
 
           </Route>
         </Routes>

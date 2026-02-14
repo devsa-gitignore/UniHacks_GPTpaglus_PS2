@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from .models import ReviewerProfile
-from .serializers import ReviewerProfileSerializer
-
+from .serializers import ReviewerProfileSerializer, UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -44,29 +44,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-# views.py
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
-
-def login_view(request):
-    if request.method == "POST":
-        # Get data from your React/HTML form
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        # Authenticate checks the credentials against your User model
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, f"Welcome back, {user.username}!")
-            return redirect('home')  # Redirect to your landing page
-        else:
-            messages.error(request, "Invalid username or password.")
-    
-    return render(request, 'login.html')
-
-def logout_view(request):
-    logout(request)
-    return redirect('home')
+class SignupView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            # Automatically hashes the password properly
+            user = serializer.save()
+            user.set_password(request.data.get('password'))
+            user.save()
+            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

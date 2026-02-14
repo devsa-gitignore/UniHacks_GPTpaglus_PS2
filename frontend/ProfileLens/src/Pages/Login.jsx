@@ -1,33 +1,66 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebookF, FaXTwitter, FaGoogle } from "react-icons/fa6";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showpassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
   const validate = () => {
     const newErrors = {};
 
-    if (!email.trim()) newErrors.email = "Email is required";
+    if (!identifier.trim()) newErrors.identifier = "Email or username is required";
     if (!password.trim()) newErrors.password = "Password is required";
 
     setErrors(newErrors);
-    if (newErrors.email) setEmail("");
+    if (newErrors.identifier) setIdentifier("");
     if (newErrors.password) setPassword("");
 
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      alert("Login Successful!!");
-      setEmail("");
+    if (!validate()) return;
+
+    setSubmitting(true);
+    setErrors({});
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/login/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: identifier.trim(),
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        const detail = data.detail || "Invalid credentials";
+        setErrors({ api: detail });
+        return;
+      }
+
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+      localStorage.setItem("username", data.username || "");
+      localStorage.setItem("role", data.role || "");
+
+      setIdentifier("");
       setPassword("");
+      navigate("/home");
+    } catch {
+      setErrors({ api: "Unable to connect to server. Please try again." });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -45,6 +78,7 @@ const Login = () => {
                   Login with
                 </p>
                 <button
+                  type="button"
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                    border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
                    transition duration-200 cursor-pointer"
@@ -53,6 +87,7 @@ const Login = () => {
                 </button>
 
                 <button
+                  type="button"
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                    border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
                    transition duration-200 cursor-pointer"
@@ -61,6 +96,7 @@ const Login = () => {
                 </button>
 
                 <button
+                  type="button"
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                    border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
                    transition duration-200 cursor-pointer"
@@ -79,13 +115,13 @@ const Login = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email or username"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none border-[#6C0C27] border-2 bg-white"
                 />
-                {errors.email && (
-                  <p className="text-[#6C0C27] text-sm">{errors.email}</p>
+                {errors.identifier && (
+                  <p className="text-[#6C0C27] text-sm">{errors.identifier}</p>
                 )}
               </div>
 
@@ -108,12 +144,14 @@ const Login = () => {
                   <p className="text-[#6C0C27] text-sm">{errors.password}</p>
                 )}
               </div>
+              {errors.api && <p className="text-[#6C0C27] text-sm">{errors.api}</p>}
               <div className="pt-8">
                 <button
                   type="submit"
+                  disabled={submitting}
                   className="w-full bg-white py-2 rounded-full hover:bg-gray-200 transition text-2xl border-2 border-[#6C0C27] cursor-pointer"
                 >
-                  Login
+                  {submitting ? "Logging in..." : "Login"}
                 </button>
                 <div className="text-center pt-4">
                   Don't have an account?{" "}

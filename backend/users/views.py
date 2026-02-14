@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import ReviewerProfile
-from .serializers import ReviewerProfileSerializer, UserSerializer
+from .models import ReviewerProfile, User
+from .serializers import ReviewerProfileSerializer, SignupSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -35,6 +35,16 @@ class ReviewerListView(APIView):
     
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
+        attrs = attrs.copy()
+        username = attrs.get("username")
+
+        if username and "@" in username:
+            try:
+                user = User.objects.get(email__iexact=username)
+                attrs["username"] = user.username
+            except User.DoesNotExist:
+                pass
+
         data = super().validate(attrs)
         
         data['role'] = self.user.role 
@@ -46,11 +56,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class SignupView(APIView):
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
-            # Automatically hashes the password properly
-            user = serializer.save()
-            user.set_password(request.data.get('password'))
-            user.save()
+            serializer.save()
             return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

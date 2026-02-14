@@ -4,6 +4,21 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields=["id","username","email","phone","age","gender","role"]
+
+class SignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "password", "phone", "age", "gender", "role"]
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
 class ReviewerProfileSerializer(serializers.ModelSerializer):
     price=serializers.SerializerMethodField()
     age = serializers.IntegerField(source='user.age', read_only=True)

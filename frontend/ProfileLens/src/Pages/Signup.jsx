@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebookF, FaXTwitter, FaGoogle } from "react-icons/fa6";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
@@ -15,6 +15,9 @@ const Signup = () => {
   const [gender, setGender] = useState("");
   const [role, setRole] = useState("");
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
   const validate = () => {
     const newErrors = {};
@@ -52,10 +55,39 @@ const Signup = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      alert("Sign Up Successful!!");
+    if (!validate()) return;
+
+    setSubmitting(true);
+    setErrors({});
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/signup/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username.trim(),
+          email: email.trim(),
+          password,
+          phone: phone.trim(),
+          age: Number(age),
+          gender,
+          role,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        const backendErrors = {};
+        Object.keys(data).forEach((key) => {
+          const value = data[key];
+          backendErrors[key] = Array.isArray(value) ? value[0] : String(value);
+        });
+        setErrors(backendErrors);
+        return;
+      }
+
       setUsername("");
       setEmail("");
       setPassword("");
@@ -64,6 +96,11 @@ const Signup = () => {
       setPhone("");
       setRole("");
       setGender("");
+      navigate("/login");
+    } catch {
+      setErrors({ api: "Unable to connect to server. Please try again." });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -81,6 +118,7 @@ const Signup = () => {
                   Signup with
                 </p>
                 <button
+                  type="button"
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                        border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
                        transition duration-200 cursor-pointer"
@@ -89,6 +127,7 @@ const Signup = () => {
                 </button>
 
                 <button
+                  type="button"
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                        border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
                        transition duration-200 cursor-pointer"
@@ -97,6 +136,7 @@ const Signup = () => {
                 </button>
 
                 <button
+                  type="button"
                   className="flex items-center justify-center w-10 h-10 rounded-full 
                        border border-[#6C0C27] text-[#6C0C27] hover:bg-white hover:text-[#6C0C27] 
                        transition duration-200 cursor-pointer"
@@ -221,8 +261,8 @@ const Signup = () => {
                       className="w-54 px-4 py-2 border rounded-lg focus:outline-none border-[#6C0C27] border-2 bg-white"
                     >
                       <option value="">Select Role</option>
-                      <option value="male">User</option>
-                      <option value="female">Reviewer</option>
+                      <option value="reviewee">User</option>
+                      <option value="reviewer">Reviewer</option>
                     </select>
                     {errors.role && (
                       <p className="text-[#6C0C27] text-sm">{errors.role}</p>
@@ -230,6 +270,7 @@ const Signup = () => {
                   </div>
                 </div>
               </div>
+              {errors.api && <p className="text-[#6C0C27] text-sm">{errors.api}</p>}
               <div className="pt-8">
                 <div className="">
                   <label className="flex items-center gap-2 text-[#6C0C27] text-sm relative bottom-20">
@@ -242,9 +283,10 @@ const Signup = () => {
                 </div>
                 <button
                   type="submit"
+                  disabled={submitting}
                   className="w-full bg-white py-2 rounded-full hover:bg-gray-200 transition text-2xl border-2 border-[#6C0C27] relative bottom-15 cursor-pointer"
                 >
-                  Signup
+                  {submitting ? "Creating account..." : "Signup"}
                 </button>
                 <div className="text-center">
                   Already have an account?{" "}

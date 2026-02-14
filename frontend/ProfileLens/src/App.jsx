@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
 import Landup from "./Pages/Landup";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
@@ -32,7 +31,6 @@ function App() {
             <Route path="/reviewees" element={<ReviewerHomePage />} />
             <Route path="/reviewuser" element={<ReviewUser />} />
           </Route>
-          {/* </Route> */}
         </Routes>
       </Router>
     </>
